@@ -12,8 +12,8 @@ class Enemy2(Enemy):
         self.SPEED_X = random.randrange(1, 10)
         self.SPEED_Y = random.randrange(1, 10)
 
-    def update(self, ships):
-        super().update(ships)
+    def update(self, ships, game):
+        super().update(ships,game)
        
         if self.movement == LEFT:
             self.rect.y -= self.speed_y +1 
