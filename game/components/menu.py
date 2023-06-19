@@ -1,4 +1,5 @@
 import pygame
+from game.components.score_manager import ScoreManager
 from game.utils.constants import FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH
 
 
@@ -12,6 +13,7 @@ class Menu:
         self.icon_rect = self.icon.get_rect()
         self.icon_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT - 100)
         self.update_message(message)
+        self.score = ScoreManager()
 
     def events(self, on_close, on_start):
         for event in pygame.event.get():
@@ -19,16 +21,26 @@ class Menu:
                 on_close()
             elif event.type == pygame.KEYDOWN:
                 on_start()
+                
 
 
     def draw(self, screen):
         screen.fill((255, 255, 255))
         screen.blit(self.text, self.text_rect)
         screen.blit(self.icon, self.icon_rect)
-        pygame.display.update()
+       
+
 
     def update_message(self, message):
         self.message = message
         self.text = self.font.render(self.message, True, (0, 0, 0))
         self.text_rect = self.text.get_rect()
-        self.text_rect.center =(self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT) 
+        self.text_rect.center =(self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+
+    def draw_message(self, screen, message, x, y):
+        text = self.font.render(message, True, (0, 0, 0))
+        text_rect = text.get_rect()
+        text_rect.center = (x, y)
+        screen.blit(text, text_rect)
+
+    

@@ -1,13 +1,10 @@
 import random
 from game.components.bullets.bullet_manager import BulletManager
-
-
 import pygame
 from pygame.sprite import Sprite
 from game.components.bullets.bullet import Bullet
-
-
 from game.utils.constants import ENEMY_1, ENEMY_TYPE, SCREEN_HEIGHT, SCREEN_WIDTH
+
 LEFT = "left"
 RIGHT = "right"
 class Enemy(Sprite):

@@ -2,14 +2,16 @@ import pygame
 from game.components.bullets.bullet_manager import BulletManager
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.menu import Menu
+from game.components.score_manager import ScoreManager
 from game.components.spaceship import Spaceship
+from game.components.powerups.manager import Manager
 
-
-from game.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, BG_SOUND, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 
 
 class Game:
     def __init__(self):
+        pygame.mixer.init()
         pygame.init()
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
@@ -21,28 +23,36 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 0
 
-        self.score = 0
+        
         self.death_count = 0
         
+        self.power_up_manager = Manager()
+        self.score_manager = ScoreManager()
         self.player = Spaceship()
         self.enemy_manager = EnemyManager()
         self.bullet_manager = BulletManager()
-        self.menu = Menu("press any key to start ")
+        self.menu = Menu("press any key to start")
 
     def run(self):
+        pygame.mixer.music.load("game/assets/Sounds/bg.mp3")
+        
+        pygame.mixer.music.play(-1)
        # Game loop: events - update - draw
         self.running = True
         while self.running: 
             if not self.playing:
                 self.show_menu()
-                    
+
+
+        pygame.mixer.music.stop()            
         pygame.display.quit()
         pygame.quit()
 
     def play(self):
         self.enemy_manager.reset()
         self.playing = True
-        self.score = 0
+        #self.score = 0
+        self.score_manager.start_new_game()
         while self.playing:
             self.events()
             self.update()
@@ -59,6 +69,7 @@ class Game:
         self.player.update(user_input,self)
         self.enemy_manager.update(self)
         self.bullet_manager.update(self)
+        self.power_up_manager.update(self)
         
 
     def draw(self):
@@ -70,6 +81,7 @@ class Game:
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
         pygame.display.update(self.screen.get_rect())
+        self.power_up_manager.draw(self.screen)
         pygame.display.flip()
 
     def draw_background(self):
@@ -83,17 +95,27 @@ class Game:
         self.y_pos_bg += self.game_speed
 
     def draw_score(self):
-        font = pygame.font.Font(FONT_STYLE, 22)
-        text = font.render(f'Score: {self.score}', True,(255, 255, 255))
-        text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
-        self.screen.blit(text, text_rect)
+        self.score_manager.draw(self.screen)
+
+    def max(self):
+        self.score_manager.draw_max_score_ever(self.screen)
+
+    def deaths(self):
+        self.score_manager.draw_games_played(self.screen)
+
     def show_menu(self):
         if self.death_count > 0:
-            self.menu.update_message("other message ")
+            self.menu.update_message("Game over")
+            self.draw_score()
+            self.max()
+            self.deaths()
+            pygame.display.flip()
+           
+    
         self.menu.draw(self.screen)
         self.menu.events(self.on_close, self.play)
+        pygame.display.flip()
 
     def on_close(self):
         self.playing = False
-        self.running = False
+        self.running = False 
