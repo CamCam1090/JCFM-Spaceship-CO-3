@@ -23,4 +23,8 @@ class Enemy2(Enemy):
            
             self.rect.x += self.SPEED_X
         
-        
+    def update_movement(self):
+        super().update_movement()
+
+    def shoot(self, bullet_manager):
+        super().shoot(bullet_manager)

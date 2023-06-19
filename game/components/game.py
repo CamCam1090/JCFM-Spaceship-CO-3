@@ -37,6 +37,7 @@ class Game:
         pygame.mixer.music.load("game/assets/Sounds/bg.mp3")
         
         pygame.mixer.music.play(-1)
+        self.adjust_background_sound_volume(0.2)
        # Game loop: events - update - draw
         self.running = True
         while self.running: 
@@ -63,6 +64,7 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
+
 
     def update(self):
         user_input = pygame.key.get_pressed()
@@ -105,7 +107,7 @@ class Game:
 
     def show_menu(self):
         if self.death_count > 0:
-            self.menu.update_message("Game over")
+            self.menu.update_message("Game over, press any key")
             self.draw_score()
             self.max()
             self.deaths()
@@ -119,3 +121,7 @@ class Game:
     def on_close(self):
         self.playing = False
         self.running = False 
+
+    
+    def adjust_background_sound_volume(self, volume):
+        pygame.mixer.music.set_volume(volume)

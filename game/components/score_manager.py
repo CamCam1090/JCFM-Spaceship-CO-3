@@ -25,7 +25,7 @@ class ScoreManager:
             self.max_score_ever = self.score
 
     def draw(self, screen):
-        text_score = self.font.render(f'Score: {self.score}', True, (0, 0, 0))
+        text_score = self.font.render(f'Score: {self.score}', True, (255, 255, 255))
         text_score_rect = text_score.get_rect()
         text_score_rect.center = (1000, 50)
         screen.blit(text_score, text_score_rect) 
@@ -33,14 +33,14 @@ class ScoreManager:
         
 
     def draw_max_score_ever(self,screen):
-        text_max_score = self.font.render(f'Max Score: {self.max_score_ever}', True, (0, 0, 0))
+        text_max_score = self.font.render(f'Max Score: {self.max_score_ever}', True, (255, 0, 0))
         text_max_score_rect = text_max_score.get_rect()
         text_max_score_rect.center = (1000, 80)
         screen.blit(text_max_score, text_max_score_rect)
         
 
     def draw_games_played(self, screen):
-        text_games_played = self.font.render(f'Games Played: {self.games_played}', True, (0, 0, 0))
+        text_games_played = self.font.render(f'Games Played: {self.games_played}', True, (0, 0, 255))
         text_games_played_rect = text_games_played.get_rect()
         text_games_played_rect.center = (1000, 110)
         screen.blit(text_games_played, text_games_played_rect)
